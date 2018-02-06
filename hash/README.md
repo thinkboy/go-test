@@ -14,14 +14,19 @@ $ go test -v balance_test.go
 PASS
 ok  	command-line-arguments	2.939s
 ```
-cityhash_murmur_test.go 验证cityhash、murmur速度
+cityhash_murmur_test.go 验证cityhash、murmur、crc32处理速度
 
 ```shell
 $ go test -v cityhash_murmur_test.go 
 === RUN   TestCityHash
---- PASS: TestCityHash (2.00s)
+--- PASS: TestCityHash (5.42s)
+	cityhash_murmur_test.go:28: total time:211.114801ms
 === RUN   TestMurMur3
---- PASS: TestMurMur3 (1.98s)
+--- PASS: TestMurMur3 (4.68s)
+	cityhash_murmur_test.go:37: total time:159.55251ms
+=== RUN   TestCRC32
+--- PASS: TestCRC32 (5.24s)
+	cityhash_murmur_test.go:47: total time:485.60166ms
 PASS
-ok  	command-line-arguments	3.985s
+ok  	command-line-arguments	15.458s
 ```

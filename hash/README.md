@@ -3,8 +3,8 @@
 hash_mod_test.go: 验证散列情况，test结果如下
 
 ```shell
+$ go test -v hash_mod_test.go 
 === RUN   TestCityHash32
-5 1249995
 4 1249768
 1 1249681
 7 1253270
@@ -12,8 +12,10 @@ hash_mod_test.go: 验证散列情况，test结果如下
 6 1249045
 2 1248789
 0 1249923
---- PASS: TestCityHash32 (2.54s)
+5 1249995
+--- PASS: TestCityHash32 (2.23s)
 === RUN   TestMurmur3
+1 1248237
 4 1252014
 7 1249278
 5 1250732
@@ -21,9 +23,9 @@ hash_mod_test.go: 验证散列情况，test结果如下
 6 1247427
 2 1251659
 3 1249871
-1 1248237
---- PASS: TestMurmur3 (2.54s)
+--- PASS: TestMurmur3 (2.21s)
 === RUN   TestCRC32
+5 1250000
 3 1250000
 0 1250000
 6 1250000
@@ -31,20 +33,19 @@ hash_mod_test.go: 验证散列情况，test结果如下
 2 1250000
 1 1250000
 7 1250000
-5 1250000
---- PASS: TestCRC32 (3.53s)
+--- PASS: TestCRC32 (3.36s)
 === RUN   TestFNV
-2 1250004
-3 1250004
-0 1250000
 1 1250000
 6 1249996
 7 1249996
 4 1250000
 5 1250000
---- PASS: TestFNV (2.69s)
+2 1250004
+3 1250004
+0 1250000
+--- PASS: TestFNV (2.59s)
 PASS
-ok  	command-line-arguments	11.305s
+ok  	command-line-arguments	10.395s
 ```
 
 hash_time_test.go 验证计算速度，test结果如下

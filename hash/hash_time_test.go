@@ -41,9 +41,11 @@ func TestMurMur3(t *testing.T) {
 
 func TestCRC32(t *testing.T) {
 	array := Init()
-	hashH := crc32.NewIEEE()
+
 	now := time.Now()
 	for _, arr := range array {
+		hashH := crc32.NewIEEE()
+		hashH.Write(arr)
 		hashH.Sum(arr)
 	}
 	t.Logf("total time:%s", time.Now().Sub(now).String())
@@ -51,9 +53,11 @@ func TestCRC32(t *testing.T) {
 
 func TestFNV(t *testing.T) {
 	array := Init()
-	hashH := fnv.New32()
+
 	now := time.Now()
 	for _, arr := range array {
+		hashH := fnv.New32()
+		hashH.Write(arr)
 		hashH.Sum(arr)
 	}
 	t.Logf("total time:%s", time.Now().Sub(now).String())

@@ -52,17 +52,17 @@ hash_time_test.go 验证计算速度，test结果如下
 ```shell
 $ go test -v hash_time_test.go 
 === RUN   TestCityHash
---- PASS: TestCityHash (6.79s)
-	hash_time_test.go:30: total time:224.754705ms
+--- PASS: TestCityHash (6.51s)
+	hash_time_test.go:31: total time:205.769065ms
 === RUN   TestMurMur3
---- PASS: TestMurMur3 (5.23s)
-	hash_time_test.go:39: total time:152.084599ms
+--- PASS: TestMurMur3 (5.68s)
+	hash_time_test.go:41: total time:150.69422ms
 === RUN   TestCRC32
---- PASS: TestCRC32 (6.07s)
-	hash_time_test.go:49: total time:524.058613ms
+--- PASS: TestCRC32 (6.52s)
+	hash_time_test.go:54: total time:1.376267139s
 === RUN   TestFNV
---- PASS: TestFNV (5.64s)
-	hash_time_test.go:59: total time:465.081755ms
+--- PASS: TestFNV (6.20s)
+	hash_time_test.go:67: total time:731.954417ms
 PASS
-ok  	command-line-arguments	23.846s
+ok  	command-line-arguments	25.030s
 ```

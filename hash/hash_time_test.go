@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hash/crc32"
+	"hash/fnv"
 	"testing"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/zhenjl/cityhash"
 )
 
+// 初始化1千万个测试用例
 func Init() [][]byte {
 	var strArray [][]byte
 	for i := 0; i < 10000000; i++ {
@@ -47,3 +49,12 @@ func TestCRC32(t *testing.T) {
 	t.Logf("total time:%s", time.Now().Sub(now).String())
 }
 
+func TestFNV(t *testing.T) {
+	array := Init()
+	hashH := fnv.New32()
+	now := time.Now()
+	for _, arr := range array {
+		hashH.Sum(arr)
+	}
+	t.Logf("total time:%s", time.Now().Sub(now).String())
+}

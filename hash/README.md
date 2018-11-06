@@ -1,4 +1,4 @@
-本片主要验证CityHash32、Murmur3、CRC32、FNV四种hash算法的散列均匀程度、计算速度。并不考虑计算CPU消耗
+本片主要验证CityHash32、Murmur3、CRC32、FNV四种hash算法的散列均匀程度、计算速度。并不考虑计算CPU、内存消耗
 
 hash_mod_test.go: 验证散列情况，test结果如下
 

@@ -42,6 +42,6 @@ PASS
 ok  	command-line-arguments	3.600s
 ```
 
-###总结
+#### 总结
 
 2种随机算法散列效果都还不错，速度方面Fastrand要快更多，并且go自带的math/rand有全局锁，因此并发越高处理越慢，而Fastrand的好处是无锁

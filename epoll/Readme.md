@@ -74,3 +74,69 @@ client.go 压测客户端
 ### cpu profile diff
 
 ![](images/CPUProfileDiff.png)
+
+
+## 压测场景2
+
+### 环境
+
+|  参数  |   |
+| :---- | :---- |
+| CPU型号 | Intel(R) Xeon(R) CPU E5-2670 v3 @ 2.30GHz |
+| CPU线程数 | 48 |
+| Go版本 | 1.12.6 |
+| Socket链接数 | 10000 |
+| epollServer epoll数量 | 5 |
+
+注：该场景为连接数较多，单连接QPS较小。（场景例如：长连接公网网关服务、推送系统等等）
+
+### 压测结果
+
+|  | goNetServer | epollServer |
+| :---- | :---- | :---- |
+| CPU | 1632% | 187% |
+| QPS | 37万 | 37万 |
+
+说明：CPU消耗大概相差9倍。epollServer的优化效果还是好很多。
+
+### goNetServer详细压测数据
+
+**CPU Profile**
+
+![](images/goNetCPUProfile2.png)
+
+**CPU Top**
+
+![](images/goNetCPUTop2.png)
+
+**QPS**
+
+![](images/goNetQPS2.png)
+
+**MemStats**
+
+![](images/goNetMemStats2.png)
+
+### epollServer详细压测数据
+
+**CPU Profile**
+
+![](images/epollServerCPUProfile2.png)
+
+**CPU Top**
+
+![](images/epollServerCPUTop2.png)
+
+**QPS**
+
+![](images/epollServerQPS2.png)
+
+**MemStats**
+
+![](images/epollServerMemStats2.png)
+
+PS：很久没有没有产出GC pause数据，原因待查
+
+### cpu profile diff
+
+![](images/CPUProfileDiff2.png)

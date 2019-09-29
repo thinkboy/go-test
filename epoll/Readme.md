@@ -39,7 +39,7 @@ client.go 压测客户端
 
 **CPU Profile**
 
-![](images/goNetCPUProfile.pdf)
+![](images/goNetCPUProfile.png)
 
 **CPU Top**
 
@@ -57,7 +57,7 @@ client.go 压测客户端
 
 **CPU Profile**
 
-![](images/epollServerCPUProfile.pdf)
+![](images/epollServerCPUProfile.png)
 
 **CPU Top**
 
@@ -73,4 +73,4 @@ client.go 压测客户端
 
 ### cpu profile diff
 
-![](images/CPUProfileDiff.pdf)
+![](images/CPUProfileDiff.png)

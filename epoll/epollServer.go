@@ -3,9 +3,13 @@ package main
 import (
 	"fmt"
 	"net"
+	"net/http"
+	"os"
+	"strconv"
 	"sync/atomic"
 	"syscall"
 	"time"
+	"net/http/pprof"
 )
 
 const (
@@ -30,7 +34,7 @@ func loopCount() {
 type EPoll struct {
 	epollFD int
 	lnFd    int // listener的fd
-	readBuf [5]byte
+	readBuf [200]byte
 }
 
 func NewEPoll() *EPoll {
@@ -98,7 +102,6 @@ func (this *EPoll) Wait() error {
 
 // 从fd里读数据
 func (this *EPoll) LoopRead(fd int) []byte {
-	var a [5]byte
 	n, err := syscall.Read(fd, this.readBuf[:])
 	if err != nil {
 		if err == syscall.EAGAIN {
@@ -112,13 +115,12 @@ func (this *EPoll) LoopRead(fd int) []byte {
 		return nil
 	}
 	//fmt.Println("epollFD:", this.epollFD, "socketFD:", fd, "read:", a[:n])
-	return a[:n]
+	return this.readBuf[:n]
 }
 
 // 往fd里写数据
 func (this *EPoll) LoopWrite(fd int, date []byte) {
-	var a [5]byte
-	n, err := syscall.Write(fd, a[:])
+	n, err := syscall.Write(fd, date)
 	if err != nil {
 		if err == syscall.EAGAIN {
 			return
@@ -156,12 +158,19 @@ func main() {
 	// 开启QPS统计
 	go loopCount()
 
+	go prof("0.0.0.0:8009")
+
+	epollNum, err := strconv.ParseInt(os.Args[1], 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
 	// 开启一个本地的监听，并拿到socket fd
 	lnFD := createListen("tcp4", "0.0.0.0:8888")
 	fmt.Println("lnFD:", lnFD)
 
 	// 创建N个epoll
-	for i := 0; i < 1; i++ {
+	for i := int64(0); i < epollNum; i++ {
 		epoll := NewEPoll()
 		epoll.AddRead(lnFD)
 		go epoll.Wait()
@@ -190,4 +199,18 @@ func createListen(network, address string) int {
 	syscall.SetNonblock(lnFD, true)
 
 	return lnFD
+}
+
+func prof(addr string) {
+	serveMux := http.NewServeMux()
+
+	serveMux.HandleFunc("/debug/pprof/", pprof.Index)
+	serveMux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	serveMux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	serveMux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	serveMux.HandleFunc("/debug/pprof/trace", pprof.Trace)
+
+	if err := http.ListenAndServe(addr, serveMux); err != nil {
+		fmt.Printf("Failed to StartTcp||err=%s\n", err)
+	}
 }

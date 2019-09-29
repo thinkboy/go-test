@@ -97,7 +97,7 @@ client.go 压测客户端
 | CPU | 1632% | 187% |
 | QPS | 37万 | 37万 |
 
-说明：CPU消耗大概相差9倍。epollServer的优化效果还是好很多。
+说明：CPU消耗大概相差9倍。epollServer的优化效果还是好很多。相比场景1，链接数的增大造成CPU增大了很多的情况，可以通过两个场景的goNetServer的CPU Profile对比看出来场景2在runtime下多出来一个`runtime.epollwait`，也就是说在做唤醒Goroutine的时候增加了CPU消耗。
 
 ### goNetServer详细压测数据
 

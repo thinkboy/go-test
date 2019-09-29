@@ -1,5 +1,9 @@
 package main
 
+/*
+	启动命令例子：./goNetServer
+*/
+
 import (
 	"fmt"
 	"net"

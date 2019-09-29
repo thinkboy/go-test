@@ -1,15 +1,19 @@
 package main
 
+/*
+	启动命令例子：./epollServer 5
+*/
+
 import (
 	"fmt"
 	"net"
 	"net/http"
+	"net/http/pprof"
 	"os"
 	"strconv"
 	"sync/atomic"
 	"syscall"
 	"time"
-	"net/http/pprof"
 )
 
 const (
@@ -20,6 +24,33 @@ var (
 	reqCount  int64
 	lastCount int64
 )
+
+func main() {
+	// 开启QPS统计
+	go loopCount()
+	// 开启pprof
+	go prof("0.0.0.0:8009")
+
+	epollNum, err := strconv.ParseInt(os.Args[1], 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	// 开启一个本地的监听，并拿到socket fd
+	lnFD := createListen("tcp4", "0.0.0.0:8888")
+	fmt.Println("lnFD:", lnFD)
+
+	// 创建N个epoll
+	for i := int64(0); i < epollNum; i++ {
+		epoll := NewEPoll()
+		epoll.AddRead(lnFD)
+		go epoll.Wait()
+	}
+
+	// 卡死，进程不退出
+	c := make(chan bool)
+	<-c
+}
 
 // 定时统计输出当前QPS
 func loopCount() {
@@ -152,33 +183,6 @@ func (this *EPoll) Accept(fd int) error {
 	// 把socket fd加到epoll里
 	this.AddReadWrite(nfd)
 	return nil
-}
-
-func main() {
-	// 开启QPS统计
-	go loopCount()
-
-	go prof("0.0.0.0:8009")
-
-	epollNum, err := strconv.ParseInt(os.Args[1], 10, 64)
-	if err != nil {
-		panic(err)
-	}
-
-	// 开启一个本地的监听，并拿到socket fd
-	lnFD := createListen("tcp4", "0.0.0.0:8888")
-	fmt.Println("lnFD:", lnFD)
-
-	// 创建N个epoll
-	for i := int64(0); i < epollNum; i++ {
-		epoll := NewEPoll()
-		epoll.AddRead(lnFD)
-		go epoll.Wait()
-	}
-
-	// 卡死，进程不退出
-	c := make(chan bool)
-	<-c
 }
 
 // 本地创建个用于listen的fd

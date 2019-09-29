@@ -1,5 +1,9 @@
 package main
 
+/*
+	启动命令例子：./client 50
+*/
+
 import (
 	"net"
 	"strconv"
